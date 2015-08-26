@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:hdp="http://www.springframework.org/schema/hadoop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<context:property-placeholder location="hadoop.properties" />
+
+	<bean id="hadoopCluster"
+		class="org.springframework.data.hadoop.test.support.HadoopClusterFactoryBean">
+		<property name="clusterId" value="HadoopClusterTests" />
+		<property name="autoStart" value="true" />
+		<property name="nodes" value="1" />
+	</bean>
+
+	<bean id="hadoopConfiguredConfiguration"
+		class="org.springframework.data.hadoop.test.support.ConfigurationDelegatingFactoryBean">
+		<property name="cluster" ref="hadoopCluster" />
+	</bean>
+
+	<hdp:configuration id="hadoopConfiguration"
+		configuration-ref="hadoopConfiguredConfiguration" />
+	
+	<hdp:job id="todo"></hdp:job>
+	<hdp:script id="setupScript" location="generate_logs.py">
+		<hdp:property name="outputDir" value="Users/tom/Documents/workspace/log-analysis-demo" />
+	</hdp:script>
+	
+	<hdp:job-runner id="runner"
+		run-at-startup="false"
+		kill-job-at-shutdown="false"
+		wait-for-completion="false"
+		pre-action="setupScript"
+		job-ref="todo"/>
+</beans>
