@@ -36,7 +36,8 @@ configurations {
 
 ext {
 	scalaVersion = '2.11'
-	hadoopVersion = '2.7.1'
+	hadoopVersion = '2.6.0'
+	hbaseVersion = '1.1.1'
 	kafkaVersion = '0.8.2.1'
 	sparkVersion = '1.4.1'
 	springHadoopVersion = '2.2.0.RELEASE'	
@@ -45,12 +46,14 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web") {
     	exclude group: 'ch.qos.logback'	// TODO add logback as an explicit dependency and replace the default logger in the source code
     }
-    compile("org.apache.hadoop:hadoop-common:${hadoopVersion}")
-    compile("org.apache.hadoop:hadoop-hdfs:${hadoopVersion}")   
+    compile("org.apache.hadoop:hadoop-common:${hadoopVersion}") 
+    compile("org.apache.hadoop:hadoop-hdfs:${hadoopVersion}")       
     compile("org.apache.kafka:kafka_${scalaVersion}:${kafkaVersion}")
     compile("org.apache.spark:spark-core_${scalaVersion}:${sparkVersion}")
-    compile("org.springframework.data:spring-data-hadoop:${springHadoopVersion}")  
-    
+    compile("org.springframework.data:spring-data-hadoop:${springHadoopVersion}")
+    compile("org.apache.hbase:hbase-common:${hbaseVersion}")
+    compile("org.apache.hbase:hbase-client:${hbaseVersion}")
+          
     // As of Spring 4.0 http test mocks require servlet 3.0 
     providedRuntime("javax.servlet:javax.servlet-api:3.1.0")    
         
